@@ -1,0 +1,39 @@
+%{
+#include <stdio.h>
+%}
+
+/* Definitions for patterns */
+DIGIT    [0-9]
+LETTER   [a-zA-Z]
+ID       {LETTER}({LETTER}|{DIGIT})*
+NUMBER   {DIGIT}+(\.{DIGIT}+)?
+
+%%
+/* Rules Section */
+
+"int"|"float"|"char"|"void"|"return"|"if"|"else"|"while"|"for"  { printf("KEYWORD: %s\n", yytext); }
+
+{ID}        { printf("IDENTIFIER: %s\n", yytext); }
+
+{NUMBER}    { printf("CONSTANT: %s\n", yytext); }
+
+"+"|"-"|"*"|"/"|"="|"<"|">"|"<="|">="|"=="|"!="  { printf("OPERATOR: %s\n", yytext); }
+
+"{"|"}"|"("|")"|";"|","   { printf("SPECIAL SYMBOL: %s\n", yytext); }
+
+[ \t\n]+    { /* Ignore whitespace */ }
+
+.           { printf("UNKNOWN: %s\n", yytext); }
+
+%%
+
+/* User Subroutines */
+int main() {
+    printf("Enter C code (Ctrl+D to end):\n");
+    yylex();
+    return 0;
+}
+
+int yywrap() {
+    return 1;
+}
